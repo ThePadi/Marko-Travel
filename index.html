@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marko Travel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Honest, practical travel guides for the Philippines and Thailand by Marek Pukas (@marko.travel). 8+ years on the road. No theory, just experience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: an airport departures hall at night opens the page, then the trip unfolds on lagoon-tinted paper: guides as boarding passes, the school as a field log, the kit as luggage tags. */
+:root{
+  --paper:#F1F6F4; --paper-2:#E3EEEB; --card:#FFFFFF; --ink:#0C2630; --muted:#4A6670; --line:#CBDCD8;
+  --lagoon:#0A8784; --lagoon-ink:#FFFFFF; --sun:#FFC63A; --sun-ink:#1A1400; --hibiscus:#E94D6B;
+  --board:#081A20; --board-2:#0F2830; --board-ink:#E9F2EF; --flap:#FFC63A;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Hanken Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+  --r:14px; --shadow:0 1px 0 rgba(12,38,48,.06),0 14px 34px -18px rgba(12,38,48,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#07161B; --paper-2:#0C2027; --card:#0F252C; --ink:#E6F1EE; --muted:#93ACB2; --line:#1E3A42;
+  --lagoon:#3CCFC4; --lagoon-ink:#03191B; --sun:#FFCD55; --sun-ink:#1A1400; --hibiscus:#FF6F8B;
+  --board:#040F13; --board-2:#0B2027; --board-ink:#E9F2EF; --flap:#FFCD55;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 18px 40px -20px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#07161B; --paper-2:#0C2027; --card:#0F252C; --ink:#E6F1EE; --muted:#93ACB2; --line:#1E3A42;
+  --lagoon:#3CCFC4; --lagoon-ink:#03191B; --sun:#FFCD55; --sun-ink:#1A1400; --hibiscus:#FF6F8B;
+  --board:#040F13; --board-2:#0B2027; --board-ink:#E9F2EF; --flap:#FFCD55;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 18px 40px -20px rgba(0,0,0,.8); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--board)}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;line-height:.92;letter-spacing:.005em;text-wrap:balance;margin:0;text-transform:uppercase}
+p{margin:0}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.hand{font-family:var(--f-hand);font-weight:700}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--board) 92%,transparent);backdrop-filter:blur(10px);color:var(--board-ink);border-bottom:1px solid rgba(255,255,255,.07)}
+.top .wrap{display:flex;align-items:center;gap:18px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:900;font-size:1.45rem;letter-spacing:.02em;text-transform:uppercase}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{color:var(--flap)}
+.nav{display:flex;gap:2px;margin-left:auto;align-items:center;position:relative;padding:4px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.nav a{position:relative;z-index:1;text-decoration:none;font-weight:600;font-size:.92rem;padding:8px 14px;border-radius:999px;color:rgba(233,242,239,.78);white-space:nowrap;transition:color .25s}
+.nav a:hover{color:var(--board-ink)}
+.nav a[aria-current="true"]{color:var(--sun-ink)}
+.nav-pill{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:var(--flap);box-shadow:0 6px 18px -6px rgba(255,198,58,.7);opacity:0;transition:transform .45s cubic-bezier(.3,1.3,.5,1),width .45s cubic-bezier(.3,1.3,.5,1),opacity .2s}
+.lang{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:3px;gap:2px;margin-left:6px}
+.lang button{all:unset;cursor:pointer;font-family:var(--f-mono);font-size:.75rem;font-weight:600;padding:5px 10px;border-radius:999px;color:var(--board-ink)}
+.lang button[aria-pressed="true"]{background:var(--flap);color:var(--sun-ink)}
+.lang{margin-left:auto}
+.nav + .lang{margin-left:6px}
+@media (max-width:900px){.top .wrap{flex-wrap:wrap;row-gap:10px}.nav{order:3;width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav + .lang{margin-left:auto}}
+@media (max-width:480px){.brand{font-size:1.25rem}.nav a{padding:7px 12px;font-size:.86rem}}
+
+/* ---------- hero / departures hall ---------- */
+.hall{background:radial-gradient(1200px 500px at 85% -10%,rgba(60,207,196,.18),transparent 60%),var(--board);color:var(--board-ink);position:relative;overflow:hidden}
+.hall .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;padding-block:56px 70px;position:relative;z-index:2}
+@media (max-width:900px){.hall .wrap{grid-template-columns:1fr;gap:36px;padding-block:36px 56px}}
+.hall-copy{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--flap)}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--flap);box-shadow:0 0 0 0 var(--flap);animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,198,58,.6)}80%,100%{box-shadow:0 0 0 12px rgba(255,198,58,0)}}
+
+.board{margin-top:18px;background:var(--board-2);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px 16px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 30px 60px -30px rgba(0,0,0,.8)}
+.board-head{display:grid;grid-template-columns:4.2rem 1fr auto;gap:12px;color:rgba(233,242,239,.55);padding:0 4px 10px;border-bottom:1px dashed rgba(255,255,255,.12)}
+.board-row{display:grid;grid-template-columns:4.2rem 1fr auto;gap:12px;align-items:center;padding:12px 4px 2px}
+.board-row .code{font-family:var(--f-mono);font-weight:600;color:var(--flap);font-size:.95rem}
+.status{font-family:var(--f-mono);font-size:.72rem;font-weight:600;letter-spacing:.08em;padding:5px 9px;border-radius:6px;background:rgba(60,207,196,.16);color:#7BE7DD;white-space:nowrap}
+.status.blink{animation:blink 1.4s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+.flaps{display:flex;flex-wrap:wrap;gap:3px;min-width:0}
+.flap{display:inline-grid;place-items:center;width:clamp(19px,3.2vw,34px);height:clamp(28px,4.6vw,48px);background:linear-gradient(#13313a 0 49%,#0a2128 51% 100%);border-radius:4px;font-family:var(--f-display);font-weight:800;font-size:clamp(1.15rem,2.9vw,2.15rem);color:var(--flap);position:relative;line-height:1}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
+.flap.tick{animation:tick .09s linear}
+@keyframes tick{0%{transform:scaleY(.86)}100%{transform:scaleY(1)}}
+.flap.sp{background:transparent;width:clamp(8px,1.2vw,14px)}
+@media (max-width:600px){.board-row{grid-template-columns:auto 1fr}.board-row .status{justify-self:end}.board-row .flaps{grid-column:1/-1;order:3;flex-wrap:nowrap;gap:2px}.flap{width:calc((100vw - 110px)/14);height:calc((100vw - 110px)/14*1.45);font-size:calc((100vw - 110px)/14*1.05)}.board-head{grid-template-columns:auto 1fr auto}}
+
+.hall h1{font-size:clamp(3.1rem,8.6vw,7.4rem);margin-top:28px;color:var(--board-ink)}
+.hall h1 em{font-style:normal;color:var(--flap)}
+.hall .lede{max-width:34em;margin-top:18px;font-size:1.13rem;color:rgba(233,242,239,.82)}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;text-decoration:none;padding:15px 22px;border-radius:999px;border:0;cursor:pointer;font:inherit;font-weight:700;line-height:1;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-sun{background:var(--flap);color:var(--sun-ink);box-shadow:0 10px 30px -10px rgba(255,198,58,.7)}
+.btn-ghost{background:rgba(255,255,255,.07);color:var(--board-ink);border:1px solid rgba(255,255,255,.18)}
+.btn-lagoon{background:var(--lagoon);color:var(--lagoon-ink)}
+.btn-line{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn svg{width:18px;height:18px}
+
+.polaroid{position:relative;justify-self:center;width:min(100%,360px);background:#FBFBF7;padding:12px 12px 52px;border-radius:4px;transform:rotate(3deg);box-shadow:0 40px 70px -30px rgba(0,0,0,.9);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.polaroid:hover{transform:rotate(0) scale(1.02)}
+.polaroid img{aspect-ratio:4/5;object-fit:cover;width:100%;border-radius:2px}
+.polaroid figcaption{position:absolute;left:14px;right:14px;bottom:10px;color:#1b2b30;font-family:var(--f-hand);font-size:1.6rem;line-height:1}
+.tag-stamp{position:absolute;top:-22px;left:-26px;width:112px;height:112px;border-radius:50%;display:grid;place-items:center;text-align:center;border:2.5px solid var(--flap);color:var(--flap);font-family:var(--f-mono);font-size:.62rem;font-weight:600;letter-spacing:.12em;transform:rotate(-14deg);background:rgba(8,26,32,.75);backdrop-filter:blur(2px)}
+.tag-stamp b{display:block;font-family:var(--f-display);font-size:1.7rem;letter-spacing:0;line-height:1}
+.route{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5}
+.route path{fill:none;stroke:rgba(255,198,58,.45);stroke-width:1.5;stroke-dasharray:4 8}
+.plane{position:absolute;z-index:1;width:26px;height:26px;color:var(--flap);offset-path:path("M -40 470 C 260 330, 520 520, 820 300 S 1300 120, 1600 160");offset-rotate:auto;animation:fly 16s linear infinite;pointer-events:none}
+@keyframes fly{from{offset-distance:0%}to{offset-distance:100%}}
+
+
+
+/* ---------- sections ---------- */
+section{padding-block:96px}
+@media (max-width:700px){section{padding-block:68px}}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:10px 28px;align-items:end;margin-bottom:44px}
+.sec-head .mono{grid-column:1/-1;color:var(--lagoon)}
+.sec-head h2{font-size:clamp(2.6rem,6.4vw,5rem)}
+.sec-head p{max-width:34em;color:var(--muted);justify-self:end;font-size:1.05rem}
+@media (max-width:820px){.sec-head{grid-template-columns:1fr}.sec-head p{justify-self:start}}
+.reveal.in{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(22px)}to{transform:none}}
+
+/* ---------- guides as boarding passes ---------- */
+.edition-note{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:26px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);padding:7px 12px;border-radius:999px;font-weight:600;font-size:.88rem}
+.chip button{all:unset;cursor:pointer;color:var(--lagoon);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.passes{display:grid;gap:34px}
+.pass{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr) 230px;background:var(--card);border-radius:22px;box-shadow:var(--shadow);border:1px solid var(--line);position:relative}
+.pass-cover{padding:22px;background:var(--paper-2);border-radius:22px 0 0 22px;display:grid;place-items:center;position:relative;overflow:hidden}
+.pass-cover img{width:100%;max-width:240px;border-radius:6px;box-shadow:0 22px 40px -18px rgba(12,38,48,.55);transform:rotate(-3deg);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pass:hover .pass-cover img{transform:rotate(0) translateY(-4px)}
+.pass-body{padding:28px 30px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.pass-meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted)}
+.pass-meta div{display:grid}
+.pass-meta b{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.pass-meta span{font-family:var(--f-mono);font-weight:600;color:var(--ink);font-size:.95rem}
+.pass h3{font-size:clamp(2rem,4.2vw,3.1rem)}
+.pass .hook{font-size:1.06rem;max-width:38em}
+.pass ul.ticks{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 22px}
+.pass ul.ticks li{position:relative;padding-left:26px;font-size:.96rem}
+.pass ul.ticks li::before{content:"";position:absolute;left:0;top:.45em;width:14px;height:8px;border-left:2.5px solid var(--lagoon);border-bottom:2.5px solid var(--lagoon);transform:rotate(-45deg)}
+@media (max-width:600px){.pass ul.ticks{grid-template-columns:1fr}}
+.pass-not{display:flex;flex-wrap:wrap;gap:8px}
+.pass-not span{font-size:.85rem;font-weight:600;padding:5px 11px;border-radius:999px;background:color-mix(in srgb,var(--hibiscus) 12%,transparent);color:var(--hibiscus);text-decoration:line-through;text-decoration-thickness:1.5px}
+details.toc{border-top:1px dashed var(--line);padding-top:14px}
+details.toc summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px}
+details.toc summary::-webkit-details-marker{display:none}
+details.toc summary::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--lagoon);color:var(--lagoon-ink);font-weight:700;transition:transform .2s}
+details.toc[open] summary::before{content:"−"}
+details.toc ol{margin:14px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;counter-reset:ch}
+details.toc li{display:grid;grid-template-columns:2.2rem 1fr;font-size:.93rem}
+details.toc li i{font-style:normal;font-family:var(--f-mono);color:var(--lagoon);font-weight:600}
+details.toc li small{display:block;color:var(--muted)}
+@media (max-width:640px){details.toc ol{grid-template-columns:1fr}}
+.peek{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+.peek button{all:unset;cursor:zoom-in;flex:none;width:96px;scroll-snap-align:start;border-radius:6px;overflow:hidden;border:1px solid var(--line);transition:transform .2s}
+.peek button:hover{transform:translateY(-3px)}
+.peek img{aspect-ratio:700/906;object-fit:cover;width:100%}
+.stub{border-left:2px dashed var(--line);padding:28px 24px;display:flex;flex-direction:column;gap:18px;position:relative}
+.stub::before,.stub::after{content:"";position:absolute;left:-15px;width:28px;height:28px;border-radius:50%;background:var(--paper)}
+.stub::before{top:-15px;box-shadow:inset 0 -1px 0 var(--line)}.stub::after{bottom:-15px;box-shadow:inset 0 1px 0 var(--line)}
+.price{font-family:var(--f-display);font-weight:900;font-size:3.6rem;line-height:.9;font-variant-numeric:tabular-nums}
+.price small{font-size:1.3rem;vertical-align:top;margin-right:2px}
+.stub .mono{color:var(--muted)}
+.barcode{margin-top:auto;height:46px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 13px);opacity:.85;border-radius:2px}
+.buy{justify-content:center;width:100%}
+.perks{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.88rem;color:var(--muted)}
+.perks li::before{content:"✓ ";color:var(--lagoon);font-weight:700}
+@media (max-width:1020px){.pass{grid-template-columns:minmax(0,240px) minmax(0,1fr)}.stub{grid-column:1/-1;border-left:0;border-top:2px dashed var(--line);flex-direction:row;flex-wrap:wrap;align-items:center}.stub::before{left:-15px;top:-15px}.stub::after{left:auto;right:-15px;bottom:auto;top:-15px}.stub .barcode{display:none}.stub .buy{width:auto}}
+@media (max-width:680px){.pass{grid-template-columns:1fr}.pass-cover{border-radius:22px 22px 0 0}.pass-cover img{max-width:200px}.pass-body{padding:22px 20px}.stub{padding:22px 20px}}
+.stamp{position:absolute;left:14px;top:14px;z-index:2;background:color-mix(in srgb,var(--paper-2) 80%,transparent);width:84px;height:84px;border:2px solid var(--lagoon);color:var(--lagoon);border-radius:50%;display:grid;place-items:center;text-align:center;font-family:var(--f-mono);font-size:.55rem;letter-spacing:.14em;font-weight:600;transform:rotate(12deg);opacity:.8;pointer-events:none}
+.stamp b{display:block;font-family:var(--f-display);font-size:1.3rem;letter-spacing:.02em;line-height:1}
+@media (max-width:680px){.stamp{display:none}}
+
+/* ---------- ugly on purpose (before / after) ---------- */
+.ugly{background:var(--paper-2)}
+.ugly .grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media (max-width:880px){.ugly .grid{grid-template-columns:1fr;gap:36px}}
+.ugly h2{font-size:clamp(2.6rem,6vw,4.8rem)}
+.ugly h2 mark{background:linear-gradient(transparent 55%,var(--sun) 55%);color:inherit;padding:0 .08em}
+.ugly .copy{display:grid;gap:18px;min-width:0}
+.ugly .copy p{color:var(--muted);font-size:1.08rem;max-width:33em}
+.ugly .note{font-family:var(--f-hand);font-size:1.7rem;color:var(--lagoon);line-height:1.1}
+.compare{position:relative;width:100%;max-width:520px;justify-self:center;aspect-ratio:4/5;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);background:var(--card);user-select:none;touch-action:pan-y}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .after{object-position:top center}
+.compare .before-wrap{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--x,50%)) 0 0)}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:3px;background:var(--sun);transform:translateX(-50%);pointer-events:none}
+.compare .handle::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--sun);color:var(--sun-ink);display:grid;place-items:center;font-weight:700;font-size:1.2rem;box-shadow:0 8px 20px -6px rgba(0,0,0,.5)}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.compare .lbl{position:absolute;bottom:14px;font-family:var(--f-mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:6px;background:rgba(8,26,32,.8);color:#fff;pointer-events:none}
+.compare .lbl.l{left:14px}.compare .lbl.r{right:14px;background:var(--sun);color:var(--sun-ink)}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.faq{grid-template-columns:1fr}}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.faq summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);color:var(--lagoon);font-weight:600}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin-top:10px;color:var(--muted)}
+
+/* ---------- group trips ---------- */
+.trips{background:var(--board);color:var(--board-ink);position:relative;overflow:hidden}
+.trips .sec-head p{color:rgba(233,242,239,.7)}
+.trips .sec-head .mono{color:var(--flap)}
+.trip-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:stretch}
+@media (max-width:880px){.trip-grid{grid-template-columns:1fr}}
+.logbook{background:var(--board-2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:28px;display:grid;gap:22px}
+.logbook .big{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.logbook .big div{border-left:2px solid var(--flap);padding-left:12px}
+.logbook .big strong{display:block;font-family:var(--f-display);font-weight:900;font-size:2.8rem;line-height:1;font-variant-numeric:tabular-nums}
+.logbook .big span{color:rgba(233,242,239,.65);font-size:.92rem}
+.logbook p{color:rgba(233,242,239,.85)}
+.trip-card{border-radius:20px;padding:28px;background:linear-gradient(160deg,rgba(60,207,196,.22),rgba(255,198,58,.12));border:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:16px;justify-content:space-between}
+.trip-card h3{font-size:2.5rem}
+.trip-card ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.trip-card li{display:flex;gap:12px;align-items:flex-start}
+.trip-card li::before{content:"✦";color:var(--flap)}
+
+/* ---------- school ---------- */
+.school-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media (max-width:900px){.school-grid{grid-template-columns:1fr}}
+.collage{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:70px;gap:10px}
+.collage img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.collage .a{grid-column:1/5;grid-row:1/5}.collage .b{grid-column:5/7;grid-row:1/4}.collage .c{grid-column:5/7;grid-row:4/7}.collage .d{grid-column:1/3;grid-row:5/7}.collage .e{grid-column:3/5;grid-row:5/7}
+.fund{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow);display:grid;gap:16px}
+.x-meter{height:14px;background:var(--paper-2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lagoon),var(--sun));border-radius:999px;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.fund-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.fund-row strong{font-family:var(--f-display);font-weight:900;font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.fund-row span{color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.facts div{background:var(--paper-2);border-radius:12px;padding:12px}
+.facts b{display:block;font-family:var(--f-display);font-size:1.8rem;line-height:1;font-variant-numeric:tabular-nums}
+.facts span{font-size:.85rem;color:var(--muted)}
+.school-copy{display:grid;gap:16px;margin-bottom:24px}
+.school-copy p{color:var(--muted);font-size:1.05rem}
+.water-opts{display:grid;gap:8px}
+.water-opts div{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.water-opts div:last-child{border-bottom:0}
+.water-opts em{font-style:normal;font-family:var(--f-mono);font-weight:600;font-size:.85rem;color:var(--lagoon);white-space:nowrap}
+.asof{font-size:.8rem;color:var(--muted)}
+
+/* ---------- kit (luggage tags) ---------- */
+.kit{background:var(--paper-2)}
+.tags{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.tag{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px 16px 16px 16px;padding:20px 20px 18px 20px;display:flex;flex-direction:column;gap:10px;text-decoration:none;transition:transform .2s,box-shadow .2s;min-width:0}
+.tag:hover{transform:translateY(-3px) rotate(-.4deg);box-shadow:var(--shadow)}
+.tag .hole{position:absolute;top:16px;right:16px;width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--paper-2)}
+.tag .cat{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--lagoon);font-weight:600}
+.tag h3{font-family:var(--f-body);font-weight:700;font-size:1.12rem;text-transform:none;line-height:1.2;padding-right:22px}
+.tag p{font-size:.9rem;color:var(--muted)}
+.tag .row{margin-top:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.code-btn{all:unset;cursor:pointer;font-family:var(--f-mono);font-weight:600;font-size:.82rem;padding:6px 10px;border-radius:8px;border:1.5px dashed var(--ink);display:inline-flex;gap:8px;align-items:center}
+.code-btn:hover{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
+.go{font-weight:700;font-size:.9rem;color:var(--lagoon);text-decoration:none}
+.go:hover{text-decoration:underline}
+
+/* ---------- work with me ---------- */
+.work{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+@media (max-width:880px){.work{grid-template-columns:1fr}}
+.work h2{font-size:clamp(2.6rem,6vw,4.6rem)}
+.work .copy{display:grid;gap:18px}
+.work .copy p{color:var(--muted);font-size:1.06rem;max-width:34em}
+.brands{display:flex;flex-wrap:wrap;gap:8px}
+.brands span{font-weight:600;font-size:.88rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.contact-card{background:var(--board);color:var(--board-ink);border-radius:22px;padding:28px;display:grid;gap:18px;box-shadow:var(--shadow)}
+.contact-card .mono{color:var(--flap)}
+.mail{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-family:var(--f-mono);font-size:1.02rem;font-weight:600;word-break:break-all}
+.mail button{all:unset;cursor:pointer;font-family:var(--f-mono);font-size:.75rem;padding:6px 10px;border-radius:8px;background:var(--flap);color:var(--sun-ink);font-weight:600}
+.socials{display:flex;gap:10px;flex-wrap:wrap}
+.socials a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.socials a:hover{background:rgba(255,255,255,.14)}
+.socials svg{width:18px;height:18px}
+
+/* ---------- footer ---------- */
+footer{overflow:hidden;background:var(--board);color:rgba(233,242,239,.7);border-top:1px solid rgba(255,255,255,.07)}
+footer .wrap{padding-block:34px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer .big{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,10.5vw,9rem);line-height:.8;color:var(--board-ink);text-transform:uppercase;letter-spacing:.01em;padding-top:30px}
+footer .big b{color:var(--flap)}
+footer small{font-size:.85rem}
+
+/* ---------- lightbox / toast ---------- */
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(92vw,620px);max-height:92vh}
+dialog.lb::backdrop{background:rgba(4,15,19,.85);backdrop-filter:blur(4px)}
+dialog.lb img{max-height:86vh;width:auto;margin:0 auto;border-radius:10px}
+dialog.lb button{position:absolute;top:8px;right:8px;all:unset;cursor:pointer;background:var(--sun);color:var(--sun-ink);font-weight:700;border-radius:999px;padding:8px 14px;font-family:var(--f-mono);font-size:.75rem}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-weight:600;transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:80;pointer-events:none}
+.toast.show{transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.plane{display:none}}
+.trip-photo{border-radius:20px;overflow:hidden;position:relative;min-height:320px}
+.trip-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.trip-photo figcaption{position:absolute;left:14px;bottom:14px;right:14px;font-family:var(--f-hand);font-size:1.5rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6);line-height:1.05}
+.trip-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:stretch}
+@media (max-width:980px){.trip-cols{grid-template-columns:1fr 1fr}.trip-photo{grid-column:1/-1;min-height:380px}}
+@media (max-width:680px){.trip-cols{grid-template-columns:1fr}}
+.quote{font-family:var(--f-hand);font-size:1.75rem;line-height:1.1;color:var(--flap)}
+.past{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.past li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.14)}
+.past li:last-child{border-bottom:0}
+.past b{font-family:var(--f-mono);font-size:.72rem;color:var(--flap);letter-spacing:.08em}
+.pass-for{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.95rem}
+.pass-for li::before{content:"→ ";color:var(--lagoon);font-weight:700}
+.src{font-size:.8rem;color:var(--muted)}
+.ugly h2 mark{background:none;color:var(--lagoon);padding:0}
+.trip-photo{margin:0}
+.past li::before{content:none!important}
+.compare .before-wrap img{object-position:72% 50%}
+.logbook .big{grid-template-columns:repeat(3,minmax(0,1fr))}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Marko Travel, home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="7" fill="var(--flap)"/><g stroke="var(--flap)" stroke-width="2.4" stroke-linecap="round"><path d="M16 2.5v4M16 25.5v4M2.5 16h4M25.5 16h4M6.4 6.4l2.8 2.8M22.8 22.8l2.8 2.8M6.4 25.6l2.8-2.8M22.8 9.2l2.8-2.8"/></g></svg>
+      <span>Marko<b>.</b>Travel</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <span class="nav-pill" id="navPill" aria-hidden="true"></span>
+      <a href="#guides" data-sec="guides" data-i18n="nav.guides">Guides</a>
+      <a href="#trips" data-sec="trips" data-i18n="nav.trips">Group trips</a>
+      <a href="#school" data-sec="school" data-i18n="nav.school">The school</a>
+      <a href="#kit" data-sec="kit" data-i18n="nav.kit">My kit</a>
+      <a href="#work" data-sec="work" data-i18n="nav.work">Work with me</a>
+    </nav>
+    <span class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="pl" aria-pressed="false">PL</button>
+    </span>
+  </div>
+</header>
+
+<main id="top">
+<!-- ===== HERO ===== -->
+<div class="hall">
+  <svg class="route" viewBox="0 0 1600 640" preserveAspectRatio="none" aria-hidden="true"><path d="M -40 470 C 260 330, 520 520, 820 300 S 1300 120, 1600 160"/></svg>
+  <svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.5 12c0-.8-.7-1.4-1.5-1.4h-5.2L10 3H8l2.5 7.6H5.4L3.6 8H2l1.2 4L2 16h1.6l1.8-2.6h5.1L8 21h2l4.8-7.6H20c.8 0 1.5-.6 1.5-1.4z"/></svg>
+  <div class="wrap">
+    <div class="hall-copy">
+      <span class="eyebrow mono" data-i18n="hero.eyebrow">Traveling the world since 2019 🌍</span>
+      <div class="board" aria-label="Departures board">
+        <div class="board-head mono"><span data-i18n="board.flight">Flight</span><span data-i18n="board.dest">Destination</span><span data-i18n="board.status">Status</span></div>
+        <div class="board-row">
+          <span class="code" id="flightCode">MT 01</span>
+          <span class="flaps" id="flaps" aria-live="polite">PHILIPPINES</span>
+          <span class="status blink" id="flightStatus" data-i18n="board.guide">GUIDE</span>
+        </div>
+      </div>
+      <h1><span data-i18n="hero.h1a">No theory.</span><br><em data-i18n="hero.h1b">Just experience.</em></h1>
+      <p class="lede" data-i18n="hero.lede">I'm Marek. 8+ years on the road, lived in 6 countries. Practical travel guides for people who want honest advice over pretty pictures.</p>
+      <div class="cta-row">
+        <a class="btn btn-sun" href="#guides"><span data-i18n="hero.cta1">Get my travel guides</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="https://www.instagram.com/marko.travel/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@marko.travel</a>
+      </div>
+    </div>
+    <figure class="polaroid reveal">
+      <span class="tag-stamp" aria-hidden="true"><span>8+ YEARS<b>ON THE</b>ROAD</span></span>
+      <img src="img/hero.jpg" alt="Marek smiling on a rooftop above orange roofs by the sea" width="1100" height="1375">
+      <figcaption>Marek ☀️ solo traveling the world 🌍</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ===== GUIDES ===== -->
+<section id="guides" data-nav="guides">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="g.eyebrow">Travel guides · PDF · instant access</span>
+      <h2 data-i18n="g.h2">Two countries.<br>No bullshit.</h2>
+      <p data-i18n="g.p">Not a hotel directory, not a day-by-day itinerary. Every page is about decisions, logistics, timing and movement. It's about better choices, not doing everything.</p>
+    </div>
+    <div class="edition-note">
+      <span class="chip" id="edChip"><span id="edLabel">Showing the English editions.</span> <button type="button" id="edSwitch">Show Polish editions</button></span>
+    </div>
+    <div class="passes" id="passes"></div>
+  </div>
+</section>
+
+<!-- ===== NOT PRETTY ===== -->
+<section class="ugly" id="inside" data-nav="guides">
+  <div class="wrap grid">
+    <div class="copy reveal">
+      <span class="mono" style="color:var(--lagoon)" data-i18n="u.eyebrow">Drag the slider</span>
+      <h2 data-i18n-html="u.h2">This is not a <mark>“pretty”</mark> travel e-book.</h2>
+      <p data-i18n="u.p1">And that’s intentional. This guide wasn’t made to impress you with edited photos or Instagram aesthetics. You can find beautiful pictures of the Philippines everywhere - online and on my Instagram.</p>
+      <p data-i18n="u.p2">I wrote this because too many people arrive with the wrong expectations and leave disappointed, stressed, or exhausted. Not because the Philippines failed them - but because no one explains how it actually works.</p>
+      <p class="note" data-i18n="u.note">honest advice over pretty pictures</p>
+    </div>
+    <div class="compare reveal" id="compare" style="--x:58%">
+      <img class="after" id="cmpPage" alt="A page from the Philippines guide about when to go" width="1200" height="1553">
+      <div class="before-wrap"><img src="img/gr-1.jpg" alt="Marek on a whitewashed terrace above the sea in Greece" width="1200" height="1600"></div>
+      <div class="handle"></div>
+      <span class="lbl l" data-i18n="u.before">Instagram</span>
+      <span class="lbl r" data-i18n="u.after">The guide</span>
+      <label class="sr" for="cmp" data-i18n="u.slider">Compare photo and guide page</label>
+      <input id="cmp" type="range" min="0" max="100" value="58">
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq" data-nav="guides">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="f.eyebrow">Before you buy</span>
+      <h2 data-i18n="f.h2">Questions</h2>
+      <p data-i18n="f.p">Payment and the download are handled by Payhip.</p>
+    </div>
+    <div class="faq" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ===== GROUP TRIPS ===== -->
+<section class="trips" id="trips" data-nav="trips">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="t.eyebrow">Group trips ☀️🌴</span>
+      <h2 data-i18n="t.h2">Travel with me</h2>
+      <p data-i18n="t.p">I love solo travel. I always have. But sometimes I wish I had someone to turn to and say, “Did we really just experience that?”</p>
+    </div>
+    <div class="trip-cols">
+      <div class="logbook reveal">
+        <span class="mono" style="color:var(--flap)" data-i18n="t.log">Greece · summer 2026 · with TruTravels</span>
+        <div class="big">
+          <div><strong>4</strong><span data-i18n="t.months">months calling Greece home</span></div>
+          <div><strong>6</strong><span data-i18n="t.trips">trips in total</span></div>
+          <div><strong>64</strong><span data-i18n="t.people">people who trusted me</span></div>
+        </div>
+        <p data-i18n="t.story">There were a lot of ferries, late nights, early mornings, questionable decisions, laughs, chaos and memories that I’ll genuinely keep for a very long time.</p>
+      </div>
+      <figure class="trip-photo reveal">
+        <img src="img/gr-2.jpg" alt="Marek taking a selfie with his group trip in Greece at sunset" width="1200" height="1600" loading="lazy">
+        <figcaption data-i18n="t.cap">Greece 🇬🇷 one of my groups</figcaption>
+      </figure>
+      <div class="trip-card reveal">
+        <p class="quote" data-i18n="t.quote">“One of my favorite parts isn’t the places we visit, it’s watching people change.”</p>
+        <div>
+          <span class="mono" style="color:rgba(233,242,239,.6)" data-i18n="t.pastLbl">Trips I've hosted</span>
+          <ul class="past" style="margin-top:10px">
+            <li><b>11.2025</b><span data-i18n="t.p1">Ecuador group adventure 🇪🇨</span></li>
+            <li><b>01.2026</b><span data-i18n="t.p2">Philippines adventure, 12 days 🇵🇭</span></li>
+            <li><b>2026</b><span data-i18n="t.p3">Greece with TruTravels 🇬🇷</span></li>
+          </ul>
+        </div>
+        <a class="btn btn-sun" style="justify-content:center" href="https://ig.me/m/marko.travel" target="_blank" rel="noopener" data-i18n="t.cta">DM me about the next trip</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHOOL ===== -->
+<section id="school" data-nav="school">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="s.eyebrow">Calibangbangan Island · Palawan 🇵🇭</span>
+      <h2 data-i18n="s.h2">248 students. No running water.</h2>
+      <p data-i18n="s.p">I've visited this island many times. In November 2025, Typhoon Tino severely damaged the local school. These kids are not strangers to me. They are kids whose names I know.</p>
+    </div>
+    <div class="school-grid">
+      <div class="collage reveal">
+        <img class="a" src="img/school-1.jpg" alt="Marek with students from the island school by the sea" loading="lazy">
+        <img class="b" src="img/school-3.jpg" alt="Students pouring water from a bucket into a basin" loading="lazy">
+        <img class="c" src="img/school-6.jpg" alt="A path between palm trees on the island" loading="lazy">
+        <img class="d" src="img/school-4.jpg" alt="Young students in uniforms smiling" loading="lazy">
+        <img class="e" src="img/school-2.jpg" alt="The school building and students outside" loading="lazy">
+      </div>
+      <div>
+        <div class="school-copy">
+          <p data-i18n="s.c1">Thanks to more than 40 donors, the first fundraiser raised over $4,200 and one classroom is being rebuilt with local volunteers. The next goal is clean water. Students and teachers carry water in buckets, and the nearest source of cleaner drinking water is about two kilometers away.</p>
+          <p data-i18n="s.c2">Almost everything has to arrive by boat from mainland Palawan, about an hour away. I'll keep sharing updates, videos, photos, receipts and progress directly from the island.</p>
+        </div>
+        <div class="fund reveal">
+          <div class="fund-row"><strong>$6,535</strong><span data-i18n="s.raised">donated so far</span></div>
+          <div class="water-opts">
+            <div><span data-i18n="s.o1">Basic water access system</span><em>$1,400–2,600</em></div>
+            <div><span data-i18n="s.o2">Safe drinking water system (the one we hope to achieve)</span><em>$2,600–6,100</em></div>
+            <div><span data-i18n="s.o3">Long-term sustainable system with solar pumping</span><em>$6,100–12,000+</em></div>
+          </div>
+          <div class="facts">
+            <div><b>107</b><span data-i18n="s.donors">donors</span></div>
+            <div><b>248</b><span data-i18n="s.students">students</span></div>
+            <div><b>~$3,500</b><span data-i18n="s.classroom">to build a new classroom</span></div>
+          </div>
+          <a class="btn btn-lagoon" style="justify-content:center" href="https://gogetfunding.com/clean-water-safe-classrooms-for-260-children-in-the-philippines/" target="_blank" rel="noopener" data-i18n="s.cta">Donate on GoGetFunding</a>
+          <span class="asof" data-i18n="s.asof">Figures from the GoGetFunding page, October 2026.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KIT ===== -->
+<section class="kit" id="kit" data-nav="kit">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono" data-i18n="k.eyebrow">Codes & links</span>
+      <h2 data-i18n="k.h2">What I travel with</h2>
+      <p data-i18n="k.p">Gear, services and discount codes from my link in bio, all in one place.</p>
+    </div>
+    <div class="tags" id="tags"></div>
+  </div>
+</section>
+
+<!-- ===== WORK ===== -->
+<section id="work" data-nav="work">
+  <div class="wrap work">
+    <div class="copy reveal">
+      <span class="mono" style="color:var(--lagoon)" data-i18n="w.eyebrow">For brands</span>
+      <h2 data-i18n="w.h2">Get people talking about your brand</h2>
+      <p data-i18n="w.p">I'm a travel creator and UGC strategist. Strategic research, copy, scripting and CTA done for you, across paid and organic. One free revision per video.</p>
+      <div class="brands" aria-label="Brands from my portfolio">
+        <span>True Traveller</span><span>Travellers Autobarn</span><span>Kayak</span><span>12Go</span><span>Flighty</span><span>Yesim</span><span>DJI</span><span>Mojo Surf</span><span>Pro Sail</span><span>Lime Resort</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-lagoon" href="https://travelwithmarko.com" target="_blank" rel="noopener" data-i18n="w.portfolio">See my UGC portfolio</a>
+        <a class="btn btn-line" href="https://calendly.com/hello-travelwithmarko/ugc" target="_blank" rel="noopener" data-i18n="w.call">Book a 15 min strategy call</a>
+      </div>
+    </div>
+    <div class="contact-card reveal">
+      <span class="mono" data-i18n="w.contact">Partnerships & collaborations</span>
+      <div class="mail"><span id="mailAddr">hello@travelwithmarko.com</span><button type="button" data-copy="hello@travelwithmarko.com" data-i18n="w.copy">Copy</button></div>
+      <div class="socials">
+        <a href="https://www.instagram.com/marko.travel/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>Instagram</a>
+        <a href="https://www.tiktok.com/@markotravel" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.1v6.3a5.7 5.7 0 1 1-5.7-5.7c.3 0 .6 0 .9.1v3.2a2.6 2.6 0 1 0 1.8 2.4V3h3z"/></svg>TikTok</a>
+        <a href="https://buycoffee.to/markotravel" target="_blank" rel="noopener">☕ <span data-i18n="w.coffee">Support me with a coffee</span></a>
+      </div>
+      <p style="color:rgba(233,242,239,.7);font-size:.95rem">Gay solo traveler | Traveling the world since 2019 🌍</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="big">Marko<b>.</b>Travel</div>
+  </div>
+  <div class="wrap">
+    <small>© 2026 Marek Pukas · <span data-i18n="ft.pay">Payments and downloads by Payhip</span></small>
+    <small><a href="#top" data-i18n="ft.top">Back to the top ↑</a></small>
+  </div>
+</footer>
+
+<dialog class="lb" id="lb"><img id="lbImg" alt=""><button type="button" id="lbClose" data-i18n="lb.close">Close</button></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const IMG={
+"en-ph-1":"img/en-ph-1.jpg","en-ph-2":"img/en-ph-2.jpg","en-ph-3":"img/en-ph-3.jpg","en-ph-4":"img/en-ph-4.jpg","en-ph-5":"img/en-ph-5.jpg","en-ph-6":"img/en-ph-6.jpg","en-ph-7":"img/en-ph-7.jpg",
+"pl-ph-1":"img/pl-ph-1.jpg","pl-ph-2":"img/pl-ph-2.jpg","pl-ph-3":"img/pl-ph-3.jpg","pl-ph-4":"img/pl-ph-4.jpg","pl-ph-5":"img/pl-ph-5.jpg","pl-ph-6":"img/pl-ph-6.jpg","pl-ph-7":"img/pl-ph-7.jpg","pl-ph-8":"img/pl-ph-8.jpg",
+"en-th-1":"img/en-th-1.jpg","en-th-2":"img/en-th-2.jpg","en-th-3":"img/en-th-3.jpg","en-th-4":"img/en-th-4.jpg","en-th-5":"img/en-th-5.jpg",
+"pl-th-1":"img/pl-th-1.jpg"
+};
+
+const T={
+en:{
+"nav.guides":"Guides","nav.trips":"Group trips","nav.school":"The school","nav.kit":"My kit","nav.work":"Work with me",
+"hero.eyebrow":"Traveling the world since 2019 🌍","board.flight":"Flight","board.dest":"Destination","board.status":"Status","board.guide":"GUIDE","board.trip":"GROUP TRIPS","board.visited":"VISITED","board.school":"FUNDRAISER",
+"hero.h1a":"No theory.","hero.h1b":"Just experience.",
+"hero.lede":"I'm Marek. 8+ years on the road, lived in 6 countries. Practical travel guides for people who want honest advice over pretty pictures.",
+"hero.cta1":"Get my travel guides",
+"g.eyebrow":"Travel guides · PDF · instant access","g.h2":"Two countries.<br>No bullshit.",
+"g.p":"Not a hotel directory, not a day-by-day itinerary. Every page is about decisions, logistics, timing and movement. It's about better choices, not doing everything.",
+"u.eyebrow":"Drag the slider","u.h2":"This is not a <mark>“pretty”</mark> travel e-book.",
+"u.p1":"And that’s intentional. This guide wasn’t made to impress you with edited photos or Instagram aesthetics. You can find beautiful pictures of the Philippines everywhere - online and on my Instagram.",
+"u.p2":"I wrote this because too many people arrive with the wrong expectations and leave disappointed, stressed, or exhausted. Not because the Philippines failed them - but because no one explains how it actually works.",
+"u.note":"honest advice over pretty pictures","u.before":"Instagram","u.after":"The guide","u.slider":"Compare photo and guide page",
+"f.eyebrow":"Before you buy","f.h2":"Questions","f.p":"Payment and the download are handled by Payhip.",
+"t.eyebrow":"Group trips ☀️🌴","t.h2":"Travel with me","t.p":"I love solo travel. I always have. But sometimes I wish I had someone to turn to and say, “Did we really just experience that?”",
+"t.log":"Greece · summer 2026 · with TruTravels","t.months":"months calling Greece home","t.trips":"trips in total","t.people":"people who trusted me",
+"t.story":"There were a lot of ferries, late nights, early mornings, questionable decisions, laughs, chaos and memories that I’ll genuinely keep for a very long time.",
+"t.cap":"Greece 🇬🇷 one of my groups","t.quote":"“One of my favorite parts isn’t the places we visit, it’s watching people change.”",
+"t.pastLbl":"Trips I've hosted","t.p1":"Ecuador group adventure 🇪🇨","t.p2":"Philippines adventure, 12 days 🇵🇭","t.p3":"Greece with TruTravels 🇬🇷","t.cta":"DM me about the next trip",
+"s.eyebrow":"Calibangbangan Island · Palawan 🇵🇭","s.h2":"248 students. No running water.",
+"s.p":"I've visited this island many times. In November 2025, Typhoon Tino severely damaged the local school. These kids are not strangers to me. They are kids whose names I know.",
+"s.c1":"Thanks to more than 40 donors, the first fundraiser raised over $4,200 and one classroom is being rebuilt with local volunteers. The next goal is clean water. Students and teachers carry water in buckets, and the nearest source of cleaner drinking water is about two kilometers away.",
+"s.c2":"Almost everything has to arrive by boat from mainland Palawan, about an hour away. I'll keep sharing updates, videos, photos, receipts and progress directly from the island.",
+"s.raised":"donated so far","s.o1":"Basic water access system","s.o2":"Safe drinking water system (the one we hope to achieve)","s.o3":"Long-term sustainable system with solar pumping",
+"s.donors":"donors","s.students":"students","s.classroom":"to build a new classroom","s.cta":"Donate on GoGetFunding","s.asof":"Figures from the GoGetFunding page, October 2026.",
+"k.eyebrow":"Codes & links","k.h2":"What I travel with","k.p":"Gear, services and discount codes from my link in bio, all in one place.",
+"w.eyebrow":"For brands","w.h2":"Get people talking about your brand","w.p":"I'm a travel creator and UGC strategist. Strategic research, copy, scripting and CTA done for you, across paid and organic. One free revision per video.",
+"w.portfolio":"See my UGC portfolio","w.call":"Book a 15 min strategy call","w.contact":"Partnerships & collaborations","w.copy":"Copy","w.coffee":"Support me with a coffee",
+"ft.pay":"Payments and downloads by Payhip","ft.top":"Back to the top ↑","lb.close":"Close",
+"toast.copied":"Copied","toast.code":"Code copied",
+"p.pages":"Pages","p.file":"File","p.lang":"Language","p.chapters":"Chapters","p.inside":"Table of contents","p.peek":"Peek inside","p.buy":"Buy now","p.not":"This guide is NOT","p.notFor":"Not for you if","p.for":"This is for you if",
+"p.once":"one-time","ed.show":"Showing the English editions.","ed.other":"Polish editions",
+"go":"Check it out"
+},
+pl:{
+"nav.guides":"Przewodniki","nav.trips":"Wyjazdy grupowe","nav.school":"Szkoła","nav.kit":"Kody i sprzęt","nav.work":"Współpraca",
+"hero.eyebrow":"Podróżuję po świecie od 2019 🌍","board.flight":"Lot","board.dest":"Kierunek","board.status":"Status","board.guide":"PRZEWODNIK","board.trip":"WYJAZDY","board.visited":"BYŁEM","board.school":"ZBIÓRKA",
+"hero.h1a":"Bez teorii.","hero.h1b":"Samo doświadczenie.",
+"hero.lede":"Jestem Marek. Ponad 8 lat w drodze, mieszkałem w 6 krajach. Praktyczne przewodniki dla osób, które wolą szczere wskazówki zamiast ładnych obrazków.",
+"hero.cta1":"Zobacz moje przewodniki",
+"g.eyebrow":"Przewodniki · PDF · natychmiastowy dostęp","g.h2":"Dwa kraje.<br>Bez ściemy.",
+"g.p":"Nie lista hoteli i nie plan dzień po dniu. To przewodniki o lepszych decyzjach, nie o zaliczaniu wszystkiego.",
+"u.eyebrow":"Przesuń suwak","u.h2":"To nie jest <mark>ładny</mark>, instagramowy e-book.",
+"u.p1":"I dokładnie taki miał być. Ten przewodnik powstał z myślą o wiedzy, nie o estetyce. Zdjęć jest mało i są surowe - celowo.",
+"u.p2":"Napisałem go, bo zbyt wiele osób przyjeżdża na Filipiny z błędnymi oczekiwaniami i wyjeżdża rozczarowanych, zmęczonych albo zestresowanych. Nie dlatego, że Filipiny są trudne - tylko dlatego, że nikt nie tłumaczy, jak one naprawdę działają.",
+"u.note":"szczere wskazówki zamiast ładnych obrazków","u.before":"Instagram","u.after":"Przewodnik","u.slider":"Porównaj zdjęcie ze stroną przewodnika",
+"f.eyebrow":"Zanim kupisz","f.h2":"Pytania","f.p":"Płatność i pobieranie obsługuje Payhip.",
+"t.eyebrow":"Wyjazdy grupowe ☀️🌴","t.h2":"Jedź ze mną","t.p":"Kocham podróże solo, zawsze kochałem. Ale czasem chciałbym mieć obok kogoś, do kogo mogę się odwrócić i powiedzieć: „Czy my naprawdę właśnie to przeżyliśmy?”",
+"t.log":"Grecja · lato 2026 · z TruTravels","t.months":"miesiące, w których Grecja była moim domem","t.trips":"wyjazdów w sumie","t.people":"osoby, które mi zaufały",
+"t.story":"Mnóstwo promów, późnych nocy, wczesnych poranków, wątpliwych decyzji, śmiechu, chaosu i wspomnień, które naprawdę zostaną ze mną na bardzo długo.",
+"t.cap":"Grecja 🇬🇷 jedna z moich grup","t.quote":"„Jedna z moich ulubionych rzeczy to nie miejsca, które odwiedzamy, tylko patrzenie, jak ludzie się zmieniają.”",
+"t.pastLbl":"Wyjazdy, które prowadziłem","t.p1":"Ekwador, wyjazd grupowy 🇪🇨","t.p2":"Filipiny, 12 dni 🇵🇭","t.p3":"Grecja z TruTravels 🇬🇷","t.cta":"Napisz do mnie o kolejnym wyjeździe",
+"s.eyebrow":"Wyspa Calibangbangan · Palawan 🇵🇭","s.h2":"248 uczniów. Bez bieżącej wody.",
+"s.p":"Byłem na tej wyspie wiele razy. W listopadzie 2025 tajfun Tino poważnie zniszczył miejscową szkołę. Te dzieci nie są mi obce. To dzieci, które znam z imienia.",
+"s.c1":"Dzięki ponad 40 darczyńcom pierwsza zbiórka zebrała ponad 4 200 $, a jedna klasa jest odbudowywana z lokalnymi wolontariuszami. Kolejny cel to czysta woda. Uczniowie i nauczyciele noszą wodę w wiadrach, a najbliższe źródło czystszej wody pitnej jest około dwóch kilometrów dalej.",
+"s.c2":"Prawie wszystko trzeba przywieźć łodzią z Palawanu, około godziny drogi. Dalej będę pokazywał aktualizacje, filmy, zdjęcia, rachunki i postępy prosto z wyspy.",
+"s.raised":"zebrane do tej pory","s.o1":"Podstawowy system dostępu do wody","s.o2":"System bezpiecznej wody pitnej (ten, który chcemy osiągnąć)","s.o3":"Długoterminowy system z pompą solarną",
+"s.donors":"darczyńców","s.students":"uczniów","s.classroom":"koszt budowy nowej klasy","s.cta":"Wpłać na GoGetFunding","s.asof":"Dane ze strony zbiórki GoGetFunding, październik 2026.",
+"k.eyebrow":"Kody i linki","k.h2":"Z czym podróżuję","k.p":"Sprzęt, usługi i kody rabatowe z mojego linku w bio, w jednym miejscu.",
+"w.eyebrow":"Dla marek","w.h2":"Niech ludzie zaczną mówić o Twojej marce","w.p":"Jestem travel creatorem i strategiem UGC. Research, copy, scenariusz i CTA robię za Ciebie, pod reklamy i organicznie. Jedna darmowa poprawka do każdego filmu.",
+"w.portfolio":"Zobacz moje portfolio UGC","w.call":"Umów 15 min rozmowy","w.contact":"Partnerstwa i współprace","w.copy":"Kopiuj","w.coffee":"Postaw mi kawę",
+"ft.pay":"Płatności i pobieranie przez Payhip","ft.top":"Do góry ↑","lb.close":"Zamknij",
+"toast.copied":"Skopiowano","toast.code":"Kod skopiowany",
+"p.pages":"Strony","p.file":"Plik","p.lang":"Język","p.chapters":"Rozdziały","p.inside":"Spis treści","p.peek":"Zajrzyj do środka","p.buy":"Kupuję","p.not":"Ten przewodnik NIE jest","p.notFor":"Nie dla Ciebie, jeśli","p.for":"Dla kogo to jest?",
+"p.once":"jednorazowo","ed.show":"Pokazuję wydania po polsku.","ed.other":"Wydania po angielsku",
+"go":"Zobacz"
+}};
+
+/* Guide copy is taken word for word from the Payhip product pages and the table-of-contents pages in each listing. */
+const GUIDES={
+en:[
+{id:"pmBMt",code:"MNL",country:"PHILIPPINES",title:"The Philippines, No Bullshit eBook",cover:"en-ph-1",lang:"English",pages:"100+",chapters:"13",size:"61 MB",
+ hook:"Over 100 pages of real experience, built from years of traveling the Philippines the hard way - so you don’t have to.",
+ learnLbl:"Inside you’ll learn:",
+ learn:["how to choose routes that actually make sense","when to go (and when not to)","how weather really affects your plans","realistic budgets and timing","common mistakes travelers keep repeating","how I personally travel the Philippines today"],
+ notLbl:"p.not",not:["a hotel directory","a day-by-day itinerary","a polished Instagram fantasy"],
+ peek:["en-ph-2","en-ph-3","en-ph-4","en-ph-5","en-ph-6","en-ph-7"],
+ ch:[["","Introduction","Why this guide exists and how to use it"],["1","The Philippines Reality Check","What to expect"],["2","When to Go","Seasons, weather, and timing your trip right"],["3","Flying to the Philippines","Cheap & smart, not exhausting"],["4","First Landing","Money, sim cards, ATM’s, apps"],["5","The Core Routes","How to see the Philippines without burning out"],["6","Destination deep dives","Where you’ll actually belong"],["7","Getting around the Philippines","Domestic flights, ferries, busses, bikes"],["8","Activities worth doing","And what I’d honestly skip"],["9","Budget reality","Food, accommodation, activities, transportation"],["10","Visas & entry","How entry actually works"],["11","Common mistakes","So you don’t ruin the trip"],["12","Who this trip is (and Isn’t) for","Choosing honestly & LGBT note"],["13","How I’d do it","My personal Philippines playbook"],["","Final Notes & Thank You",""]]},
+{id:"zb8TH",code:"BKK",country:"THAILAND",title:"Thailand Without Burning Out",cover:"en-th-1",lang:"English",chapters:"16",size:"17 MB",
+ hook:"Thailand is easy to enter, easy to move around, and easy to “do wrong.” This guide is for people who want to travel well, not just travel far.",
+ learnLbl:"Inside you’ll get:",
+ learn:["Realistic cost breakdowns in USD so you don’t bleed money through “cheap” convenience","Visa clarity + what actually matters before you land - not forum myths","How transport really works and why moving too often quietly ruins trips","Where to stay: Bangkok + islands + north - explained by vibe, not hype","How to manage energy: heat, alcohol, social life, sleep, routine","Safety + common mistakes that repeatedly mess people up","The apps + small tips that make Thailand feel smooth instead of chaotic","How I personally do Thailand after trial and error"],
+ forList:["You’re going to Thailand for 2-8 weeks (or longer)","You don’t want to waste half your trip relocating every 2 days","You want the real budget (not “Thailand is cheap” fantasy)","You want to pick locations based on the energy that fits you","You want depth, routine, and less chaos"],
+ notLbl:"p.notFor",not:["You want a party-only guide","You want a “Top 10 beaches” list","You’re doing Thailand in 3 days and want a tight itinerary"],
+ peek:["en-th-2","en-th-3","en-th-4","en-th-5"],
+ ch:[["1","Before You Come To Thailand","The lie I believed"],["2","Who Thailand Is Actually For","Choosing honestly"],["3","Visas","How entry actually works"],["4","Flying to Thailand","Best routes"],["5","First Landing","Money, SIM, Transport"],["6","Budget Reality","What Thailand Actually Costs"],["7","Getting Around Thailand","Domestic flights, ferries, busses, bikes"],["8","Weather & Seasons","What Weather Actually Affects"],["9","Where to Go in Thailand","Destinations deep dive"],["10","Accommodation in Thailand","Where to stay"],["11","Health & Energy","How to manage your energy"],["12","Safety & Social Reality","So you don’t ruin the trip"],["13","How I Personally Do Thailand","My personal take"],["14","What to Pack","A practical packing list"],["15","The Mistakes People Keep Making",""],["16","Useful Apps, Small Tips & Things No One Tells You",""]]}
+],
+pl:[
+{id:"Z2Ce1",code:"MNL",country:"FILIPINY",title:"Filipiny. Praktycznie i bez ściemy",cover:"pl-ph-1",lang:"Polski",chapters:"15",size:"60 MB",
+ hook:"Ten przewodnik powstał z myślą o wiedzy, nie o estetyce. Każda strona skupia się na tym, co faktycznie ma znaczenie w podróży.",
+ learnLbl:"W środku znajdziesz m.in.:",
+ learn:["jak wybierać trasy, które mają sens","kiedy jechać (a kiedy lepiej odpuścić)","jak pogoda realnie wpływa na plany","realistyczne budżety i timing","najczęstsze błędy podróżników","jak ja sam podróżuję po Filipinach po latach doświadczeń"],
+ notLbl:"p.not",not:["listą hoteli","planem dzień po dniu","„top 10 miejsc”","podróżniczą fantazją"],
+ peek:["pl-ph-2","pl-ph-3","pl-ph-4","pl-ph-5","pl-ph-6","pl-ph-7","pl-ph-8"],
+ ch:[["1","Filipiny - reality check, zanim kupisz bilet","Czego się spodziewać"],["2","Kiedy jechać","Pory roku, pogoda i dobre planowanie terminu"],["3","Lot na Filipiny","Tanio i z głową, a nie na wykończenie"],["4","Pierwsze lądowanie","Pieniądze, karty SIM, bankomaty, aplikacje"],["5","Główne trasy","Jak zobaczyć Filipiny i się nie zajechać"],["6","Głębokie spojrzenie na miejsca","Gdzie naprawdę będziesz się dobrze czuć"],["7","Poruszanie się po Filipinach","Loty krajowe, promy, busy, skutery"],["8","Aktywności, które są warte czasu","I te, które szczerze bym pominął"],["9","Pakowanie i zdrowie","Co warto zabrać a czego nie"],["10","Budżet bez ściemy","Jedzenie, hotele, aktywności, transport"],["11","Wizy i wjazd na Filipiny","Jak to tak naprawdę działa"],["12","Najczęstsze błędy","Czyli jak nie zepsuć sobie wyjazdu"],["13","Dla kogo jest ten wyjazd","Szczere wybory i wzmianka o LGBT"],["14","Jak ja bym to zrobił","Mój osobisty playbook na Filipiny"],["15","Aplikacje i małe tipy",""]]},
+{id:"6TbN2",code:"BKK",country:"TAJLANDIA",title:"Tajlandia - wersja o której inni nie mówią",cover:"pl-th-1",lang:"Polski",size:"17 MB",
+ hook:"Tajlandia jest łatwa do wjazdu, łatwa do przemieszczania się… i bardzo łatwa do zepsucia. Ten przewodnik jest dla osób, które chcą podróżować mądrze.",
+ learnLbl:"W środku znajdziesz:",
+ learn:["Realne rozpiski kosztów (USD + PLN), żeby „tania” wygoda nie wyżarła Ci budżetu","Jasne info wizowe - co naprawdę ma znaczenie przed przylotem, bez mitów z forów","Jak działa transport i dlaczego zbyt częste przemieszczanie się po cichu niszczy wyjazd","Gdzie spać: Bangkok, wyspy, północ - wytłumaczone klimatem miejsca, nie hype’em","Jak ogarniać energię: upał, alkohol, życie towarzyskie, sen, rutyna","Bezpieczeństwo + najczęstsze błędy, które ludzie powtarzają w kółko","Aplikacje i małe triki, które sprawiają, że Tajlandia jest płynna, a nie chaotyczna","Jak ja osobiście ogarniam Tajlandię po latach prób i błędów"],
+ forList:["Jedziesz do Tajlandii na 2-8 tygodni (albo dłużej)","Nie chcesz tracić połowy wyjazdu na przeprowadzki co 2 dni","Chcesz prawdziwy budżet, a nie bajkę „Tajlandia jest tania”","Chcesz wybierać miejsca pod swój vibe, nie pod trendy","Szukasz głębi, rutyny i mniej chaosu"],
+ notLbl:"p.notFor",not:["Szukasz tylko przewodnika imprezowego","Chcesz listę „Top 10 plaż”","Masz 3 dni i potrzebujesz gotowej, napiętej rozpiski dzień po dniu"],
+ peek:[],ch:[]}
+]};
+const PERKS={en:["PDF • instant access","works on phone, tablet & laptop","buy once, keep forever"],pl:["PDF • natychmiastowy dostęp","działa na telefonie, tablecie i laptopie","kupujesz raz - masz na zawsze"]};
+
+const FAQ={
+en:[["How do I get the guide?","Click Buy now and check out on Payhip. After purchase you get an email receipt with your download page link."],
+["Can I read it on my phone?","Yes. It's a PDF that works on phone, tablet & laptop, and the table of contents is clickable."],
+["Is it a day-by-day itinerary?","No. It's about better choices, not doing everything."],
+["English or Polish?","Both guides come in English and Polish. Switch the language at the top of the page to see the other editions."],
+["How much does it cost?","$10.99 per guide. Buy once, keep forever."],
+["Who wrote it?","Me, Marek Pukas. 8+ years on the road, lived in 6 countries. No theory, just experience."]],
+pl:[["Jak dostanę przewodnik?","Kliknij Kupuję i zapłać na Payhip. Po zakupie dostaniesz maila z potwierdzeniem i linkiem do strony pobierania."],
+["Przeczytam go na telefonie?","Tak. To PDF, który działa na telefonie, tablecie i laptopie, a spis treści jest klikalny."],
+["To plan dzień po dniu?","Nie. To przewodnik o lepszych decyzjach, nie o zaliczaniu wszystkiego."],
+["Po polsku czy po angielsku?","Oba przewodniki są po polsku i po angielsku. Przełącz język u góry strony, żeby zobaczyć drugie wydania."],
+["Ile to kosztuje?","10,99 $ za przewodnik. Kupujesz raz, masz na zawsze."],
+["Kto to napisał?","Ja, Marek Pukas. Ponad 8 lat w drodze, mieszkałem w 6 krajach. Bez teorii, samo doświadczenie."]]};
+
+/* Kit: names, codes and descriptions as they appear on linktr.ee/Marko.travel */
+const KIT=[
+{cat:{en:"Code MARKO10 · 10% off",pl:"Kod MARKO10 · -10%"},name:"Rhinokey® SmartCard",d:{en:"The world's thinnest trackable credit card sized card, compatible with Apple's Find My or Android Google Find Hub.",pl:"Najcieńsza na świecie karta-lokalizator w rozmiarze karty płatniczej, działa z Apple Find My i Google Find Hub."},code:"MARKO10",url:"https://www.rhinokey.com/products/rhinokey-smartcard"},
+{cat:{en:"Code MARKO · 10% off",pl:"Kod MARKO · -10%"},name:"Nostalgia backpack",d:{en:"The Dopamine Travel System: a modular 55 litre bag with a 35 litre main section and a detachable 20 litre bag.",pl:"The Dopamine Travel System: modułowa torba 55 l, część główna 35 l i odpinany plecak 20 l."},code:"MARKO",url:"https://www.nostalgiapacks.com/collections/the-dopamine-travel-system"},
+{cat:{en:"Insurance",pl:"Ubezpieczenie"},name:"True Traveller",d:{en:"Get the best travel insurance with True Traveller.",pl:"Ubezpieczenie podróżne True Traveller."},url:"https://www.truetraveller.com/backpackers-insurance?tag=4598"},
+{cat:{en:"eSIM",pl:"eSIM"},name:"Pangia Pass",d:{en:"Best eSIM.",pl:"Najlepsze eSIM."},url:"https://pangiapass.com/?ref=pEkzd2OR5zdQrP3WE7lO7I3WCFe2"},
+{cat:{en:"Camera",pl:"Kamera"},name:"HOVERAir X1 PRO & PROMAX",d:{en:"8K and 4K action cameras that follow you wherever you go.",pl:"Kamery 8K i 4K, które lecą za Tobą, gdziekolwiek jesteś."},url:"https://dada.link/n4qGbc"},
+{cat:{en:"Bags",pl:"Torby"},name:"BAGSMART Blast Collection",d:{en:"The Blast Collection from BAGSMART.",pl:"Kolekcja Blast od BAGSMART."},url:"https://s.rto.ai/t/1517fdea"},
+{cat:{en:"Trips",pl:"Wycieczki"},name:"TourRadar",d:{en:"Discover trips on TourRadar.",pl:"Wycieczki na TourRadar."},url:"https://www.tourradar.com/srp/d-morocco?utm_source=traveller-1340025&utm_medium=tourradar_web&utm_campaign=share_serp"},
+{cat:{en:"Magazine",pl:"Magazyn"},name:"LiveStory® · Marek Pukas",d:{en:"My story in print, as a paperback.",pl:"Moja historia w wersji drukowanej."},url:"https://www.lulu.com/shop/livestory/livestory-marek-pukas/paperback/product-kv69jye.html"}
+];
+
+let lang="en";
+try{const s=localStorage.getItem("mt-lang");if(s==="pl"||s==="en")lang=s;else if((navigator.language||"").toLowerCase().startsWith("pl"))lang="pl";}catch(e){if((navigator.language||"").toLowerCase().startsWith("pl"))lang="pl";}
+let edition=null;
+const t=k=>(T[lang]&&T[lang][k])||T.en[k]||k;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LBL={en:{pages:"Pages",file:"File",lang:"Language",ch:"Chapters"},pl:{pages:"Strony",file:"Plik",lang:"Język",ch:"Rozdziały"}};
+
+function renderPasses(){
+  const ed=edition||lang;
+  const list=GUIDES[ed];
+  const L=LBL[lang];
+  $("#passes").innerHTML=list.map((g,i)=>`
+  <article class="pass reveal">
+    <span class="stamp" aria-hidden="true"><span>${g.code}<b>${esc(g.country)}</b>${ed==="pl"?"PL":"EN"}</span></span>
+    <div class="pass-cover"><img src="${IMG[g.cover]}" alt="Cover: ${esc(g.title)}" width="820" height="1061" loading="lazy"></div>
+    <div class="pass-body">
+      <div class="pass-meta">
+        <div><b>${L.lang}</b><span>${esc(g.lang)}</span></div>
+        ${g.pages?`<div><b>${L.pages}</b><span>${esc(g.pages)}</span></div>`:""}
+        ${g.chapters?`<div><b>${L.ch}</b><span>${esc(g.chapters)}</span></div>`:""}
+        <div><b>${L.file}</b><span>PDF · ${esc(g.size)}</span></div>
+      </div>
+      <h3>${esc(g.title)}</h3>
+      <p class="hook">${esc(g.hook)}</p>
+      <div><span class="mono" style="color:var(--muted)">${esc(g.learnLbl)}</span><ul class="ticks" style="margin-top:10px">${g.learn.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      ${g.forList?`<div><span class="mono" style="color:var(--muted)">${t("p.for")}</span><ul class="pass-for" style="margin-top:8px">${g.forList.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+      <div><span class="mono" style="color:var(--muted)">${t(g.notLbl)}</span><div class="pass-not" style="margin-top:8px">${g.not.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>
+      ${g.peek.length?`<div><span class="mono" style="color:var(--muted)">${t("p.peek")}</span><div class="peek" style="margin-top:8px">${g.peek.map((p,j)=>`<button type="button" data-lb="${j}" data-g="${i}" aria-label="${t("p.peek")} ${j+1}"><img src="${IMG[p]}" alt="" loading="lazy" width="1200" height="1553"></button>`).join("")}</div></div>`:""}
+      ${g.ch.length?`<details class="toc"><summary>${t("p.inside")} (${g.ch.filter(c=>c[0]).length})</summary><ol>${g.ch.map(c=>`<li><i>${c[0]?c[0].padStart(2,"0"):"·"}</i><span>${esc(c[1])}${c[2]?`<small>${esc(c[2])}</small>`:""}</span></li>`).join("")}</ol></details>`:""}
+    </div>
+    <div class="stub">
+      <div><span class="mono">${t("p.once")}</span><div class="price"><small>$</small>10.99</div></div>
+      <ul class="perks">${PERKS[ed].map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      <div class="barcode" aria-hidden="true"></div>
+      <a class="btn btn-sun buy payhip-buy-button" data-theme="none" data-product="${g.id}" href="https://payhip.com/b/${g.id}" target="_blank" rel="noopener">${t("p.buy")} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </article>`).join("");
+  const other=ed==="pl"?"en":"pl";
+  const SHOW={en:{en:"Showing the English editions.",pl:"Showing the Polish editions."},pl:{en:"Pokazuję wydania po angielsku.",pl:"Pokazuję wydania po polsku."}};
+  const SW={en:{en:"Show English editions",pl:"Show Polish editions"},pl:{en:"Pokaż wydania po angielsku",pl:"Pokaż wydania po polsku"}};
+  $("#edLabel").textContent=SHOW[lang][ed];
+  $("#edSwitch").textContent=SW[lang][other];
+  $("#edSwitch").onclick=()=>{edition=other;renderPasses();observe();};
+}
+function renderFaq(){$("#faqList").innerHTML=FAQ[lang].map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");}
+function renderKit(){
+  $("#tags").innerHTML=KIT.map(k=>`<div class="tag reveal"><span class="hole" aria-hidden="true"></span><span class="cat">${esc(k.cat[lang])}</span><h3>${esc(k.name)}</h3><p>${esc(k.d[lang])}</p><div class="row">${k.code?`<button type="button" class="code-btn" data-copy="${k.code}" data-code="1">${k.code} <span aria-hidden="true">⧉</span></button>`:""}<a class="go" href="${k.url}" target="_blank" rel="noopener">${t("go")} →</a></div></div>`).join("");
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const v=t(el.dataset.i18n);if(v.includes("<br>"))el.innerHTML=v;else el.textContent=v;});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml);});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+  $("#cmpPage").src=IMG[lang==="pl"?"pl-ph-3":"en-ph-3"];
+  edition=null;renderPasses();renderFaq();renderKit();observe();
+  requestAnimationFrame(spy);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("mt-lang",lang)}catch(e){}applyLang();}));
+
+/* active tab bubble */
+const nav=$("#nav"),pill=$("#navPill"),links=[...nav.querySelectorAll("a[data-sec]")];
+let current=null,lock=0;
+function movePill(a){
+  if(!a){pill.style.opacity="0";links.forEach(l=>l.removeAttribute("aria-current"));current=null;return;}
+  links.forEach(l=>l.toggleAttribute("aria-current",l===a));if(a)a.setAttribute("aria-current","true");
+  pill.style.width=a.offsetWidth+"px";pill.style.transform=`translateX(${a.offsetLeft}px)`;pill.style.opacity="1";
+  if(nav.scrollWidth>nav.clientWidth){const x=a.offsetLeft-(nav.clientWidth-a.offsetWidth)/2;nav.scrollTo({left:x,behavior:"smooth"});}
+  current=a.dataset.sec;
+}
+function spy(){
+  if(Date.now()<lock)return;
+  const line=window.innerHeight*0.35;let found=null;
+  document.querySelectorAll("[data-nav]").forEach(s=>{const r=s.getBoundingClientRect();if(r.top<=line&&r.bottom>line)found=s.dataset.nav;});
+  if(found!==current)movePill(found?links.find(l=>l.dataset.sec===found):null);
+  else if(found){const a=links.find(l=>l.dataset.sec===found);pill.style.width=a.offsetWidth+"px";pill.style.transform=`translateX(${a.offsetLeft}px)`;}
+}
+links.forEach(a=>a.addEventListener("click",()=>{movePill(a);lock=Date.now()+900;}));
+let ticking=false;
+window.addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(()=>{spy();ticking=false;});}},{passive:true});
+window.addEventListener("resize",()=>{current=null;spy();});
+
+/* split-flap board */
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FLIGHTS=[["MT 01","PHILIPPINES","board.guide"],["MT 02","THAILAND","board.guide"],["MT 03","GREECE","board.trip"],["MT 04","CALIBANGBANGAN","board.school"],["MT 05","SRI LANKA","board.visited"],["MT 06","ECUADOR","board.trip"]];
+const LEN=14,ABC="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const flapsEl=$("#flaps");flapsEl.textContent="";
+const cells=[];for(let i=0;i<LEN;i++){const c=document.createElement("span");c.className="flap";c.textContent=" ";flapsEl.appendChild(c);cells.push(c);}
+let fi=0;
+function setWord(w,instant){
+  const word=w.padEnd(LEN," ").slice(0,LEN);flapsEl.setAttribute("aria-label",w);
+  cells.forEach((c,i)=>{const target=word[i];c.classList.toggle("sp",target===" "&&i>=w.length);
+    if(instant||reduce){c.textContent=target;return;}
+    let n=4+i%5+Math.floor(Math.random()*4);
+    const step=()=>{if(n--<=0){c.textContent=target;c.classList.remove("tick");return;}c.textContent=target===" "?" ":ABC[Math.floor(Math.random()*26)];c.classList.remove("tick");void c.offsetWidth;c.classList.add("tick");setTimeout(step,55);};
+    setTimeout(step,i*35);});
+}
+function nextFlight(){const f=FLIGHTS[fi%FLIGHTS.length];$("#flightCode").textContent=f[0];setWord(f[1]);const st=$("#flightStatus");st.dataset.i18n=f[2];st.textContent=t(f[2]);fi++;}
+setWord("PHILIPPINES",true);fi=1;
+if(!reduce)setInterval(nextFlight,3400);
+
+/* reveal */
+let io;
+function observe(){
+  if(!("IntersectionObserver" in window))return;
+  if(!io)io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;io.unobserve(e.target);e.target.classList.add("in");}),{threshold:.12});
+  document.querySelectorAll(".reveal:not(.in)").forEach(el=>io.observe(el));
+}
+
+/* compare slider */
+const cmp=$("#cmp"),box=$("#compare");cmp.addEventListener("input",()=>box.style.setProperty("--x",cmp.value+"%"));
+
+/* lightbox + copy */
+const lb=$("#lb");
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-lb]");
+  if(b){const g=GUIDES[edition||lang][+b.dataset.g];$("#lbImg").src=IMG[g.peek[+b.dataset.lb]];$("#lbImg").alt=g.title;if(lb.showModal)lb.showModal();return;}
+  const c=e.target.closest("[data-copy]");
+  if(c){const txt=c.dataset.copy;const done=()=>toast(c.dataset.code?t("toast.code")+": "+txt:t("toast.copied"));
+    try{navigator.clipboard.writeText(txt).then(done,()=>{sel(c);done();});}catch(err){sel(c);done();}}
+});
+$("#lbClose").addEventListener("click",()=>lb.close());
+lb.addEventListener("click",e=>{if(e.target===lb)lb.close();});
+function sel(el){const r=document.createRange();r.selectNodeContents(el.previousElementSibling||el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+let tt;function toast(m){const el=$("#toast");el.textContent=m;el.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>el.classList.remove("show"),1800);}
+
+applyLang();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{current=null;spy();});
+
+/* Payhip overlay checkout loads on the live domain; in this preview the buttons open Payhip directly */
+if(/travelwithmarko\.com$|github\.io$/.test(location.hostname)){const s=document.createElement("script");s.src="https://payhip.com/payhip.js";document.body.appendChild(s);}
+})();
+</script>
+
+</html>
