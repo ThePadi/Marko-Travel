@@ -315,6 +315,33 @@ dialog.lb button{position:absolute;top:8px;right:8px;all:unset;cursor:pointer;ba
 .past li::before{content:none!important}
 .compare .before-wrap img{object-position:72% 50%}
 .logbook .big{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:600px){
+ .plane,.route{display:none}
+ .polaroid{width:min(100%,330px);transform:rotate(2deg);padding:10px 10px 46px}
+ .polaroid figcaption{font-size:1.25rem;bottom:12px;left:12px;right:12px}
+ .tag-stamp{left:-6px;top:-18px;width:86px;height:86px;font-size:.5rem}
+ .tag-stamp b{font-size:1.3rem}
+ .hall h1{margin-top:22px}
+ .board{padding:12px}
+ .logbook{padding:22px}
+ .logbook .big strong{font-size:2.3rem}
+ .logbook .big span{font-size:.85rem}
+ .trip-photo{min-height:420px}
+ .collage{grid-auto-rows:56px;gap:8px}
+ .fund-row strong{font-size:2.4rem}
+ .facts b{font-size:1.4rem}
+ .pass-cover{padding:18px}
+ .price{font-size:3rem}
+ .stub{gap:12px}
+ .stub .buy{width:100%;justify-content:center}
+ .sec-head{margin-bottom:30px}
+ .cta-row .btn{flex:1 1 auto;justify-content:center}
+ details.toc li{font-size:.9rem}
+}
+.toast{transform:translate(-50%,calc(100% + 60px));visibility:hidden}
+.toast.show{transform:translate(-50%,0);visibility:visible}
+section,[id="top"]{scroll-margin-top:84px}
+@media (max-width:900px){.top .wrap{padding-block:8px;row-gap:6px}.nav{padding:3px}.nav-pill{top:3px;bottom:3px}section{scroll-margin-top:112px}}
 </style>
 
 <header class="top">
